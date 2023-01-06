@@ -45,7 +45,7 @@ public class AgvController {
         agv.setTasks(tasks);
         
         String jsonString = new Gson().toJson(agv);
-        
+        System.out.println(jsonString);
         return jsonString;
     }
     
