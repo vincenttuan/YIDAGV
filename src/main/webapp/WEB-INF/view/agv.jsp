@@ -39,7 +39,7 @@
         </script>
         <script>
             var xhr = new XMLHttpRequest();
-            var baseUrl = 'http://localhost:8080/${pageContext.request.contextPath}/mvc';
+            var baseUrl = 'http://localhost:8080${pageContext.request.contextPath}/mvc';
             
             window.onload = function(){
                 setInterval(getData, 1000);

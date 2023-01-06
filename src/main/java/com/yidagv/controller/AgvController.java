@@ -27,6 +27,7 @@ public class AgvController {
     }
     
     @GetMapping(value = "/remove/task/{id}")
+    @ResponseBody
     public String removeTask(@PathVariable("id") String id) {
         agv.removeTaskById(id);
         return "ok";
