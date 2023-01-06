@@ -2,6 +2,7 @@ package com.yidagv.controller;
 
 import com.google.gson.Gson;
 import com.yidagv.model.AGV;
+import com.yidagv.model.Place;
 import com.yidagv.model.Station;
 import com.yidagv.model.Task;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class AgvController {
     @GetMapping(value = "/json")
     @ResponseBody
     public String getJson() {
+        Place place = new Place(1002);
         
         Station station = new Station(
             2, 1, 0, 2, 1, 3, 2, 0, 1, 0, 0,1, 3, 0, 1
@@ -38,7 +40,7 @@ public class AgvController {
         
         AGV agv = new AGV();
         agv.setStatus(1);
-        agv.setPlace(1002);
+        agv.setPlace(place);
         agv.setTask("202301040001");
         agv.setBattery(100);
         agv.setStation(station);

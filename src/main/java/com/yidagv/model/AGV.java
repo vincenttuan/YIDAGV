@@ -6,7 +6,7 @@ import java.util.List;
 public class AGV {
 
     private int status;
-    private int place;
+    private Place place;
     private String task;
     private int battery;
     private Station station;
@@ -17,7 +17,7 @@ public class AGV {
         return status;
     }
 
-    public int getPlace() {
+    public Place getPlace() {
         return place;
     }
 
@@ -38,7 +38,7 @@ public class AGV {
         this.status = status;
     }
 
-    public void setPlace(int place) {
+    public void setPlace(Place place) {
         this.place = place;
     }
 
