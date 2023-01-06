@@ -18,10 +18,6 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pure-min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/yid.css">
         
-        <script>
-            var ststation=0;
-            var noticestation=0;
-        </script>
         <script type="text/javascript">
             // 選擇日期(稼動率)
             $(function() {
@@ -142,6 +138,30 @@
                 }
                 
             }
+            
+            function setfromStationNo(no) {
+                document.getElementById('ststation').value = no;
+                var noText  = '';
+                switch(no) {
+                    case 1011:
+                        noText = '1-1';
+                        break;
+                }
+                document.getElementById('ststationText').value = noText;
+            }
+            
+            function setServiceNo(no) {
+                document.getElementById('noticestation').value = no;
+                var noText  = '';
+                switch(no) {
+                    case 1511:
+                        noText = 'PCB測試';
+                        break;
+                }
+                document.getElementById('noticestationText').value = noText;
+            }
+            
+            /*
             // 監聽按鈕(實作將選擇的按鈕放入確認列)
             const cbtns = document.querySelectorAll(".st");
             const cbtns1 = document.querySelectorAll(".st1");
@@ -165,8 +185,15 @@
                cbtn1.addEventListener("click", doit1,false);
               }
             );
+            */
             // 紀錄確認列與發送
-            function subm(){alert("http://192.168.1.246:20100/task0=1&1&"+ststation+"&"+noticestation+"&"+ststation);console.log(ststation);};
+            function subm(){
+                var ststation = document.getElementById('ststation').value;
+                var noticestation = document.getElementById('noticestation').value;
+                
+                alert("http://192.168.1.246:20100/task0=1&1&"+ststation+"&"+noticestation+"&"+ststation);
+                console.log(ststation);
+            };
             // 清除按鈕
             function cn(){
                 document.getElementById("ststation").value = "";
@@ -271,7 +298,7 @@
                             <legend style=" padding: 5px;font-size: 18px;">出發站</legend>
                             <table class="table row table-borderless">
                                 <tr>
-                                    <td><button type="button" class="st btn" id="1-1" onclick="ststation=1011"><nobr>1-1</nobr></button></td>
+                                    <td><button type="button" class="st btn" id="1-1" onclick="setfromStationNo(1011)"><nobr>1-1</nobr></button></td>
                                     <td><button type="button" class="st btn" id="1-2" onclick="ststation=1012"><nobr>1-2</nobr></button></td>
                                     <td><button type="button" class="st btn" id="1-3" onclick="ststation=1013"><nobr>1-3</nobr></button></td>
                                     <td><button type="button" class="st btn" id="1-4" onclick="ststation=1014"><nobr>1-4</nobr></button></td>
@@ -300,7 +327,7 @@
                             <legend style=" padding: 5px;font-size: 18px;">通知站</legend>
                             <table class="table row table-borderless">
                                 <tr>
-                                    <td><button type="button" class="st1 btn btn-info" id="PCB測試" onclick="noticestation=1511"><nobr>PCB測試</nobr></button></td>
+                                    <td><button type="button" class="st1 btn btn-info" id="PCB測試" onclick="setServiceNo(1511)"><nobr>PCB測試</nobr></button></td>
                                     <td><button type="button" class="st1 btn btn-info" id="PCB外線" onclick="noticestation=1512"><nobr>PCB外線</nobr></button></td>
                                     <td><button type="button" class="st1 btn btn-info" id="PCB外AOI" onclick="noticestation=1513"><nobr>PCB外AOI</nobr></button></td>
                                     <td><button type="button" class="st1 btn btn-info" id="PCB網印" onclick="noticestation=1514"><nobr>PCB網印</nobr></button></td>
@@ -326,8 +353,11 @@
                 </div>
                 <div class="row card" style=" align-items: center;background-color: #DEDEDE;border: 20px;">
                     <br>
-                    <p>出發站：<input id="ststation" type="text" readonly style="text-align: center"/>
-                    通知站：<input id="noticestation" type="text" readonly style="text-align: center"/>
+                    <p>
+                    出發站：<input id="ststationText" type="text" readonly style="text-align: center"/>
+                            <input id="ststation" type="hidden"/>
+                    通知站：<input id="noticestationText" type="text" readonly style="text-align: center"/>
+                            <input id="noticestation" type="hidden" />
                     <input type="button" class="btn btn-primary" value="確認" onclick="subm()">
                     <input type="button" class="btn btn-primary" value="清除" onclick="cn()"></p>
                     
