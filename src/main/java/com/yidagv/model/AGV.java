@@ -1,22 +1,23 @@
 package com.yidagv.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AGV {
 
-    private float status;
-    private float place;
+    private int status;
+    private int place;
     private String task;
-    private float battery;
+    private int battery;
     private Station station;
-    private ArrayList<Task> tasks = new ArrayList<>();
+    private List<Task> tasks = new ArrayList<>();
 
     // Getter Methods 
-    public float getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public float getPlace() {
+    public int getPlace() {
         return place;
     }
 
@@ -24,7 +25,7 @@ public class AGV {
         return task;
     }
 
-    public float getBattery() {
+    public int getBattery() {
         return battery;
     }
 
@@ -33,11 +34,11 @@ public class AGV {
     }
 
     // Setter Methods 
-    public void setStatus(float status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public void setPlace(float place) {
+    public void setPlace(int place) {
         this.place = place;
     }
 
@@ -45,7 +46,7 @@ public class AGV {
         this.task = task;
     }
 
-    public void setBattery(float battery) {
+    public void setBattery(int battery) {
         this.battery = battery;
     }
 
@@ -53,11 +54,11 @@ public class AGV {
         this.station = station;
     }
 
-    public ArrayList<Task> getTasks() {
+    public List<Task> getTasks() {
         return tasks;
     }
 
-    public void setTasks(ArrayList<Task> tasks) {
+    public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
     

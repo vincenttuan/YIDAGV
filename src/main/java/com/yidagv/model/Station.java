@@ -18,6 +18,29 @@ public class Station {
     private int s34;
     private int s35;
 
+    public Station() {
+    }
+
+    public Station(int s11, int s12, int s13, int s14, int s15, int s21, int s22, int s23, int s24, int s25, int s31, int s32, int s33, int s34, int s35) {
+        this.s11 = s11;
+        this.s12 = s12;
+        this.s13 = s13;
+        this.s14 = s14;
+        this.s15 = s15;
+        this.s21 = s21;
+        this.s22 = s22;
+        this.s23 = s23;
+        this.s24 = s24;
+        this.s25 = s25;
+        this.s31 = s31;
+        this.s32 = s32;
+        this.s33 = s33;
+        this.s34 = s34;
+        this.s35 = s35;
+    }
+    
+    
+    
     public int getS11() {
         return s11;
     }
