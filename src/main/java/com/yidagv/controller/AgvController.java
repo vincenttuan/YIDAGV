@@ -49,13 +49,12 @@ public class AgvController {
             2, 1, 0, 2, 1, 3, 2, 0, 1, 0, 0,1, 3, 0, 1
         );
         
-        List<Task> tasks = List.of(
-            new Task("202301040002", 1002, 1020, 6),
-            new Task("202301040003", 1003, 1021, 7),
-            new Task("202301040004", 1004, 1022, 8),
-            new Task("202301040005", 1005, 1023, 9),
-            new Task("202301040006", 1006, 1024, 10)
-        );
+        List<Task> tasks = new ArrayList<>();
+        tasks.add(new Task("202301040002", 1002, 1020, 6));
+        tasks.add(new Task("202301040003", 1003, 1021, 7));
+        tasks.add(new Task("202301040004", 1004, 1022, 8));
+        tasks.add(new Task("202301040005", 1005, 1023, 9));
+        tasks.add(new Task("202301040006", 1006, 1024, 10));
         
         agv = new AGV();
         agv.setStatus(1);
