@@ -6,8 +6,6 @@
     <head>
         <title>Start Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="./css/pure-min.css">
-        <link rel="stylesheet" href="./css/yid.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -17,64 +15,128 @@
         <script src="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pure-min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/yid.css">
+        
         <script>
             var ststation=0;
             var noticestation=0;
         </script>
-        <style>
-            .st{
-                width:65px;
-                height:35px;
-            }
-            .st1{
-                padding: 2px;
-                width:75px;
-                height:35px;
-                font-size: 13px;
-                text-align: center;
-            }
-            .parse{
-                width:90px;
-                height:70px;
-                text-align: center;
-                background-color: #DEDEDE;
-                border: 0;
-            }
-            .btn-success{
-                --bs-btn-disabled-opacity:1;
-            }
-            .btn-danger{
-                --bs-btn-disabled-opacity:1;
-            }
-            .btn-primary{
-                --bs-btn-active-bg: #000000;
-                --bs-btn-active-border-color: #000000;
+        <script type="text/javascript">
+            // 選擇日期(稼動率)
+            $(function() {
+            $('#datepicker').datepicker({
+                format:"yyyy-mm-dd",
+                defaultDate:new Date()
+            });
+        });
+        $(function() {
+            $('#datepicker1').datepicker({
+                format:"yyyy-mm-dd",
+                defaultDate:new Date()
+            });
+        });
+        </script>
+        <script>
+            window.onload = function(){
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET',"http://localhost:8080/${pageContext.request.contextPath}/testjson.html", true);
+                xhr.send();
+                xhr.onload = function(){
+                    var data = JSON.parse(this.responseText);
+                    console.log(data);
+                    update(data);
+                };
+            };
+            
+            function update(data){  // 更新資料
+                // 工作狀態
+                switch (data.status) {
+                    case 0:
+                      document.getElementById("status").value = "未連線";
+                      break;
+                    case 1:
+                      document.getElementById("status").value = "待命中";
+                      break;
+                    case 2:
+                      document.getElementById("status").value = "任務執行中";
+                      break;
+                    default:
+                      console.log(`內容錯誤: ${data.status}.`);
+                }
+                document.getElementById("task").value = data.task;  // 目前任務
+                document.getElementById("place").value = data.place;  // 目前位置
+                document.getElementById("battery").value = data.battery+"%";  // 目前電壓
+                // 佇列任務
+                for(let i=1;i<6;i++){
+                    let n = String("task"+i);
+                    document.getElementById(n).innerHTML = 
+//                            "<th>"+data.task_list[n].id+"</th>"+
+                            "<td>"+data.task_list[n].start_station+"</td><td>"+
+                            data.task_list[n].notice_station+"</td><td>"+data.task_list[n].end_station+"</td>"+
+                            "<button type=\"button\" class=\"btn btnt\" onclick=\"confirm("+data.task_list[n].id+")\">"+
+                            "<svg xmlns=\"${pageContext.request.contextPath}/image/trash.svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-trash\" viewBox=\"0 0 16 16\">"+
+                            "<path d=\"M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z\"/>"+
+                            "<path fill-rule=\"evenodd\" d=\"M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z\"/>"+
+                            "</svg></button>";
+                }
+                // 更改站點按鈕顏色
+                for(var i=1;i<4;i++){
+                    for(var j=1;j<6;j++){
+                        let n = String(i)+String(j);
+                        let m = String(i)+"-"+String(j);
+                        switch (data.station[n]) {
+                            case 0:
+                              document.getElementById(m).className = "st btn btn-success disabled";
+                              break;
+                            case 1:
+                              document.getElementById(m).className = "st btn btn-danger disabled";
+                              break;
+                            case 2:
+                              document.getElementById(m).className = "st btn btn-primary";
+                              break;
+                            case 3:
+                              document.getElementById(m).className = "st btn btn-warning disabled";
+                              break;
+                            default:
+                              console.log(`內容錯誤: ${data.station[n]}.`);
+                        }
+                    }
+                }
                 
             }
-            .btn-warning{
-                --bs-btn-disabled-opacity:1;
-                --bs-btn-bg:#FFB957;
+            // 監聽按鈕(實作將選擇的按鈕放入確認列)
+            const cbtns = document.querySelectorAll(".st");
+            const cbtns1 = document.querySelectorAll(".st1");
+            
+            function doit() {
+                document.getElementById("ststation").value = this.id;
             }
-            .btn-info{
-                --bs-btn-disabled-opacity:1;
-                --bs-btn-bg:#FFE153;
-                --bs-btn-border-color:#FFE153;
-                --bs-btn-hover-bg:#F0C800;
-                --bs-btn-hover-border-color:#F0C800;
-                --bs-btn-active-bg:#DBB700;
-                --bs-btn-active-border-color:#DBB700;
+            
+            function doit1() {
+                document.getElementById("noticestation").value = this.id;
             }
-            .btnt{
-                --bs-btn-bg: #FF0000;
-                --bs-btn-hover-bg: #EA0000;
-                --bs-btn-active-bg:#EA0000;
-                color: red;
+            
+            cbtns.forEach(
+              function(cbtn) {
+               cbtn.addEventListener("click", doit,false);
+              }
+            );
+            
+            cbtns1.forEach(
+              function(cbtn1) {
+               cbtn1.addEventListener("click", doit1,false);
+              }
+            );
+            // 紀錄確認列與發送
+            function subm(){alert("http://192.168.1.246:20100/task0=1&1&"+ststation+"&"+noticestation+"&"+ststation);console.log(ststation);};
+            // 清除按鈕
+            function cn(){
+                document.getElementById("ststation").value = "";
+                document.getElementById("noticestation").value = "";
             }
-            .bb{
-                display: inline;
-                line-height: 10px;
-            }
-        </style>
+            
+        </script>
         
         
     </head>
@@ -245,120 +307,6 @@
                 </div>
             </div>
         <br>
-        
-<!--        <footer>
-            <p>©元創智動股份有限公司 All Rights Reserved</p>
-        </footer>-->
-        <script type="text/javascript">
-            // 選擇日期(稼動率)
-            $(function() {
-            $('#datepicker').datepicker({
-                format:"yyyy-mm-dd",
-                defaultDate:new Date()
-            });
-        });
-        $(function() {
-            $('#datepicker1').datepicker({
-                format:"yyyy-mm-dd",
-                defaultDate:new Date()
-            });
-        });
-        </script>
-        <script>
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET',"http://localhost:8080/YIDWebDemo/testjson.html", true);
-//            xhr.open('GET',"http://192.168.1.165:8080/YIDWebDemo/testjson.html", true);
-            xhr.send();
-            xhr.onload = function(){
-                var data = JSON.parse(this.responseText);
-                console.log(data);
-                update(data);
-            };
-            function update(data){  // 更新資料
-                // 工作狀態
-                switch (data.status) {
-                    case 0:
-                      document.getElementById("status").value = "未連線";
-                      break;
-                    case 1:
-                      document.getElementById("status").value = "待命中";
-                      break;
-                    case 2:
-                      document.getElementById("status").value = "任務執行中";
-                      break;
-                    default:
-                      console.log(`內容錯誤: ${data.status}.`);
-                }
-                document.getElementById("task").value = data.task;  // 目前任務
-                document.getElementById("place").value = data.place;  // 目前位置
-                document.getElementById("battery").value = data.battery+"%";  // 目前電壓
-                // 佇列任務
-                for(let i=1;i<6;i++){
-                    let n = String("task"+i);
-                    document.getElementById(n).innerHTML = 
-//                            "<th>"+data.task_list[n].id+"</th>"+
-                            "<td>"+data.task_list[n].start_station+"</td><td>"+
-                            data.task_list[n].notice_station+"</td><td>"+data.task_list[n].end_station+"</td>"+
-                            "<button type=\"button\" class=\"btn btnt\" onclick=\"confirm("+data.task_list[n].id+")\">"+
-                            "<svg xmlns=\"${pageContext.request.contextPath}/image/trash.svg\" width=\"16\" height=\"16\" fill=\"currentColor\" class=\"bi bi-trash\" viewBox=\"0 0 16 16\">"+
-                            "<path d=\"M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z\"/>"+
-                            "<path fill-rule=\"evenodd\" d=\"M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z\"/>"+
-                            "</svg></button>";
-                }
-                // 更改站點按鈕顏色
-                for(var i=1;i<4;i++){
-                    for(var j=1;j<6;j++){
-                        let n = String(i)+String(j);
-                        let m = String(i)+"-"+String(j);
-                        switch (data.station[n]) {
-                            case 0:
-                              document.getElementById(m).className = "st btn btn-success disabled";
-                              break;
-                            case 1:
-                              document.getElementById(m).className = "st btn btn-danger disabled";
-                              break;
-                            case 2:
-                              document.getElementById(m).className = "st btn btn-primary";
-                              break;
-                            case 3:
-                              document.getElementById(m).className = "st btn btn-warning disabled";
-                              break;
-                            default:
-                              console.log(`內容錯誤: ${data.station[n]}.`);
-                        }
-                    }
-                }
-                
-            }
-            // 監聽按鈕(實作將選擇的按鈕放入確認列)
-            const cbtns = document.querySelectorAll(".st");
-            const cbtns1 = document.querySelectorAll(".st1");
-            function doit() {
-                document.getElementById("ststation").value = this.id;
-            }
-            function doit1() {
-                document.getElementById("noticestation").value = this.id;
-            }
-            cbtns.forEach(
-              function(cbtn) {
-               cbtn.addEventListener("click", doit,false);
-              }
-            );
-            cbtns1.forEach(
-              function(cbtn1) {
-               cbtn1.addEventListener("click", doit1,false);
-              }
-            );
-            // 紀錄確認列與發送
-            function subm(){alert("http://192.168.1.246:20100/task0=1&1&"+ststation+"&"+noticestation+"&"+ststation);console.log(ststation);};
-            // 清除按鈕
-            function cn(){
-                document.getElementById("ststation").value = "";
-                document.getElementById("noticestation").value = "";
-            }
-            
-        </script>
-
     </body>
 </html>
 
