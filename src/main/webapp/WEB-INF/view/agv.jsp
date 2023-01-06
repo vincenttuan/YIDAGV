@@ -69,7 +69,7 @@
                 document.getElementById("battery").value = data.battery+"%";  // 目前電壓
                 // 放車子
                 document.getElementById("agv_car").innerHTML = '<img src="${pageContext.request.contextPath}/image/car.png" width="80" ' +
-                                                               'style="position: absolute;left: ' + data.place.coordinate[0] + 'px;top: ' + data.place.coordinate[1] + ' px;z-index: 10" />';
+                                                               'style="position: absolute;left: ' + data.place.coordinate[0] + 'px;top: ' + data.place.coordinate[1] + 'px;z-index: 10" />';
                 // 佇列任務
                 for(let i=0;i<data.tasks.length;i++){
                     let n = String("task"+(i));

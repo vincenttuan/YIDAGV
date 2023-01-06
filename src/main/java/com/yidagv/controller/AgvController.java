@@ -24,7 +24,7 @@ public class AgvController {
     @GetMapping(value = "/json")
     @ResponseBody
     public String getJson() {
-        Place place = new Place(1001);
+        Place place = new Place(1003);
         
         Station station = new Station(
             2, 1, 0, 2, 1, 3, 2, 0, 1, 0, 0,1, 3, 0, 1
