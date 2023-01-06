@@ -39,15 +39,24 @@
         </script>
         <script>
             window.onload = function(){
+                setInterval(getData, 1000);
+            };
+            
+            function getData() {
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET',"http://localhost:8080/${pageContext.request.contextPath}/mvc/agv/json", true);
                 xhr.send();
                 xhr.onload = function(){
-                    var data = JSON.parse(this.responseText);
-                    console.log(data);
-                    update(data);
+                    if(xhr.status == 200){
+                        var data = JSON.parse(this.responseText);
+                        console.log(data);
+                        update(data);
+                        //window.setTimeout(getData(), 5000);
+                        //setInterval(getData(), 3000);
+                    }
                 };
-            };
+            }
+            
             
             function update(data){  // 更新資料
                 // 工作狀態
@@ -144,7 +153,6 @@
         
     </head>
     <body background="${pageContext.request.contextPath}/image/bgimg.jpg" style="padding: 20px;line-height: 10px;">
-        
         <img src="${pageContext.request.contextPath}/image/logo.png" alt="image error">
         <br>
         <span id="agv_car"></span>

@@ -6,6 +6,7 @@ import com.yidagv.model.Place;
 import com.yidagv.model.Station;
 import com.yidagv.model.Task;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,7 @@ public class AgvController {
     @GetMapping(value = "/json")
     @ResponseBody
     public String getJson() {
-        Place place = new Place(new Random().nextInt(10) + 1001);
+        Place place = new Place(new Random().nextInt((int)new Date().getTime()%10) + 1001);
         
         Station station = new Station(
             2, 1, 0, 2, 1, 3, 2, 0, 1, 0, 0,1, 3, 0, 1
